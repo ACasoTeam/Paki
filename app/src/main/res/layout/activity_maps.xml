@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,6 +18,7 @@
         android:orientation="vertical"
         android:background="@android:color/white"
         android:id="@+id/linearLayoutNewStage">
+
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/top"
@@ -85,8 +93,13 @@
         </RelativeLayout>
 
     </LinearLayout>
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_cast_dark" />
 </RelativeLayout>
 
-
+</android.support.design.widget.CoordinatorLayout>
 

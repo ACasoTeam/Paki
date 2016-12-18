@@ -47,7 +47,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
