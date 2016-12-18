@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,15 +27,20 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 //
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import acasoteam.pakistapp.asynktask.GetAddress;
+import acasoteam.pakistapp.asynktask.GetJson;
 import acasoteam.pakistapp.database.DBHelper;
+import acasoteam.pakistapp.entity.Paki;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -46,24 +52,41 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
-
+    DBHelper myHelper;
+    SQLiteDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        //PROVA
-        DBHelper myHelper = DBHelper.getInstance(getApplicationContext());
-        SQLiteDatabase db = myHelper.getWritableDatabase();
 
-        try {
-            myHelper.createDB(db, "true");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         //FINE PROVA
 
+        String u = "http://acaso-pakistapp.rhcloud.com/PakiOperation?action=pakilist";
+/*
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);*/
+        String out = "";
+        try {
+            out = new GetJson().execute(u).get();
+
+            JSONArray jPakis = new JSONArray(out);
+
+            //PROVA
+            myHelper = DBHelper.getInstance(getApplicationContext());
+            db = myHelper.getWritableDatabase();
+
+
+            myHelper.createDB(db, jPakis);
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.v("MapsActivity",""+out);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
@@ -73,14 +96,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        try {
+        /*try {
             int a = new GetAddress().execute().get();
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 
@@ -102,6 +125,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+
+
+        List<Paki> pakis = null;
+        try {
+            pakis = myHelper.selectPakis(db);
+
+            for (Paki paki : pakis){
+                mMap.addMarker(new MarkerOptions().position(new LatLng(paki.getLat(), paki.getLon())).title("You are here!").snippet("Consider yourself located"));
+                Log.v("MapsActivity","lat:"+paki.getLat()+", lon:"+paki.getLon());
+            }
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (pakis != null) {
+
+
+        }
+
+
+
+
+
     }
 
     protected synchronized void buildGoogleApiClient() {
