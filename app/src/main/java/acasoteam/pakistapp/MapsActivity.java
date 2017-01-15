@@ -311,18 +311,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void goToNearest(View view) {
         PakiDao pakidao = new PakiDao();
-        pakidao.goToNearest(latLng);
+        pakidao.goToNearest(latLng, getApplicationContext());
     }
 
 
     public void report(View view) {
+
         ReportDao reportdao = new ReportDao();
 
         //todo
-        float lat = 222;
-        float lon = 222;
 
-        //reportdao.sendReport(lat, lan);
+        reportdao.sendReport(latLng);
 
 
 
