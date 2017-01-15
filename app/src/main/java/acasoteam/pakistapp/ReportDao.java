@@ -14,7 +14,7 @@ public class ReportDao {
 
     public boolean sendReport (LatLng latLng, Context context){
 
-        String u = "http://acaso-pakistapp.rhcloud.com/PakiOperation?action=sendReport&lat="+latLng.latitude+"&lon="+latLng.longitude;
+        String u = "http://acaso-pakistapp.rhcloud.com/UserOperation?action=sendReport&lat="+latLng.latitude+"&lon="+latLng.longitude;
         try {
             new SendReport(context).execute(u);
 

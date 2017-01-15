@@ -2,6 +2,7 @@ package acasoteam.pakistapp;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -27,12 +28,20 @@ public class PakiDao {
         try {
             List<Paki> pakis = myHelper.selectPakis(db);
 
+            System.out.println("Num paki " + pakis.size());
             for(Paki p : pakis){
+
                 double dist = distance(p.getLat(),p.getLon(), latLng.latitude,latLng.longitude,"K");
+                System.out.println("Paki dist: " + p.getAddress() + " dist " + dist);
+
                 if(dist<bestDist){
                     best = p;
+                    bestDist =dist;
+
                 }
             }
+
+            System.out.println("Paki best: " + best.getAddress() + " dist " + bestDist);
 
             return best;
 
