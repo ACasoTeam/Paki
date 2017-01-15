@@ -321,7 +321,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //todo
 
-        reportdao.sendReport(latLng);
+        reportdao.sendReport(latLng, getApplicationContext());
 
 
 

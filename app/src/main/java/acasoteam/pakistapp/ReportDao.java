@@ -1,5 +1,7 @@
 package acasoteam.pakistapp;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import acasoteam.pakistapp.asynktask.SendReport;
@@ -10,11 +12,11 @@ import acasoteam.pakistapp.database.DBHelper;
  */
 public class ReportDao {
 
-    public boolean sendReport (LatLng latLng){
+    public boolean sendReport (LatLng latLng, Context context){
 
-        String u = "http://acaso-pakistapp.rhcloud.com/PakiOperation?action=sendReport";
+        String u = "http://acaso-pakistapp.rhcloud.com/PakiOperation?action=sendReport&lat="+latLng.latitude+"&lon="+latLng.longitude;
         try {
-            new SendReport().execute(u);
+            new SendReport(context).execute(u);
 
         } catch (Exception e) {
             e.printStackTrace();

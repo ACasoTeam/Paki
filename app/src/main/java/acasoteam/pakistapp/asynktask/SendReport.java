@@ -1,7 +1,10 @@
 package acasoteam.pakistapp.asynktask;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -9,20 +12,27 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import acasoteam.pakistapp.MapsActivity;
+
 /**
  * Created by andre on 18/12/2016.
  */
 
-public class SendReport extends AsyncTask<String, Void, String> {
-
-    private Exception exception;
-
+public class SendReport extends AsyncTask<String, Void, Void> {
 
 
     BufferedReader reader = null;
+    int res;
 
+    Context context;
 
-    protected String doInBackground(String... urls) {
+    public SendReport(Context activity) {
+        this.context = activity;
+
+    }
+
+    @Override
+    protected Void doInBackground(String... urls) {
         try {
             HttpURLConnection urlConnection = null;
             URL url = new URL(urls[0]);
@@ -48,70 +58,59 @@ public class SendReport extends AsyncTask<String, Void, String> {
             if (inputStream == null) {
                 // Nothing to do.
                 Log.v("GetJson","return null");
-                return null;
+                res = 0;
+            } else {
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    Log.v("GetJson","buffer.length() == 0");
+                    res = 0;
+                } else {
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+                    Log.v("GetJson","buffer = "+buffer.toString());
+                    res = Integer.parseInt(buffer.toString());
+                }
+
+
+
+                //forecastJsonStr = buffer.toString();
+
+
             }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-
-
-            }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                Log.v("GetJson","buffer.length() == 0");
-                return null;
-            }
-            //forecastJsonStr = buffer.toString();
-
-            Log.v("GetJson",buffer.toString());
-            return  buffer.toString();
-
-
-
-
-
-/*
-            try( DataOutputStream wr = new DataOutputStream( urlConnection.getOutputStream())) {
-                Log.d("test debug", "postData:" + postData);
-                Log.d("test debug", "postDataLength:" + postDataLength);
-                Log.d("test debug", "urls[1]:" + urls[1]);
-                wr.write( postData );
-                wr.flush();
-                wr.close();
-            }
-*/
-
-            /*InputStream in = urlConnection.getInputStream();
-            InputStreamReader isw = new InputStreamReader(in);
-
-            int data = isw.read();
-            Log.d("test debug", "data:" + data);
-
-            String res="";
-            while (data != -1) {
-                char current = (char) data;
-                res+=current;
-                data = isw.read();
-            }
-            return res;*/
 
         } catch (Exception e) {
-            this.exception = e;
             e.printStackTrace();
             Log.d("test debug", "eccez:" + e.getMessage());
 
-            return null;
         }
+
+        return null;
     }
 
-    protected void onPostExecute(String feed) {
+    @Override
+    protected void onPostExecute(Void v) {
         // TODO: check this.exception
         // TODO: do something with the feed
+
+        CharSequence text = "";
+
+        if (res == 0){
+            text = "Errore nell'invio del Report";
+        } else {
+            text = "Report inviato correttamente";
+        }
+
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+
+
     }
 }
