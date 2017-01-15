@@ -106,17 +106,18 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_media_play"/>
+                android:src="@drawable/ic_media_play"
+                android:onClick="report"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="16dp"
-            android:src="@drawable/ic_cast_dark"
-            android:layout_above="@id/fab2"
-            android:adjustViewBounds="false"
-            android:layout_alignParentRight="true"
-            />
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_cast_dark"
+                android:layout_above="@id/fab2"
+                android:adjustViewBounds="false"
+                android:layout_alignParentRight="true"
+                android:onClick="goToNearest"/>
 
 
         </RelativeLayout>
