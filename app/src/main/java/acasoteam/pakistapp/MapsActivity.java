@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -54,6 +55,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationRequest mLocationRequest;
     DBHelper myHelper;
     SQLiteDatabase db;
+
+    LatLng latLng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,7 +228,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
 
             //move map camera
@@ -304,4 +308,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // You can add here other case statements according to your requirement.
         }
     }
+
+    public void goToNearest(View view) {
+        PakiDao pakidao = new PakiDao();
+        pakidao.goToNearest(latLng);
+    }
+
+
+    public void report(View view) {
+        ReportDao reportdao = new ReportDao();
+
+        //todo
+        float lat = 222;
+        float lon = 222;
+
+        //reportdao.sendReport(lat, lan);
+
+
+
+
+    }
+
 }
