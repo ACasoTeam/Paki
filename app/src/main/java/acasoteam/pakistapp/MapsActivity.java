@@ -311,7 +311,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void goToNearest(View view) {
         PakiDao pakidao = new PakiDao();
-        pakidao.goToNearest(latLng, getApplicationContext());
+
+        //todo: cambiare ste assegnazioni random
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            pakidao.goToNearest(latLng, getApplicationContext());
+
+        }
+
     }
 
 
@@ -319,9 +333,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         ReportDao reportdao = new ReportDao();
 
-        //todo
+        //todo: cambiare ste assegnazioni random
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-        reportdao.sendReport(latLng, getApplicationContext());
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            reportdao.sendReport(latLng, getApplicationContext());
+
+        }
+
 
 
 
