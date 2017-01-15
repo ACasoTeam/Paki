@@ -120,7 +120,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 Paki paki;
                 do {
-
                     paki = new Paki(c.getInt(c.getColumnIndex("idPaki")),
                             c.getString(c.getColumnIndex("name")),
                             c.getString(c.getColumnIndex("address")),
