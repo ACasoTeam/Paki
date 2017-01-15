@@ -1,5 +1,7 @@
 package acasoteam.pakistapp;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import acasoteam.pakistapp.entity.Paki;
@@ -9,8 +11,10 @@ import acasoteam.pakistapp.entity.Paki;
  */
 public class PakiDao {
 
-    public Paki goToNearest(LatLng latLng) {
+    public Paki goToNearest(LatLng latLng, Context context) {
 
+
+        System.out.println("ciao");
         return null;
     }
 
