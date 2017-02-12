@@ -134,16 +134,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             p.setMargins(0, 12, 21, -10);
         }*/
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
         // get the bottom sheet view
         LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
 
@@ -498,7 +488,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location = getLastKnownLocation();
 
             if (location != null) {
 
@@ -522,19 +512,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         ReportDao reportdao = new ReportDao();
 
+        Log.v("MapsActivity","report");
         //todo: cambiare ste assegnazioni random
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+            Log.v("MapsActivity","permessi ok");
+
             Location location = getLastKnownLocation();
+            Log.v("MapsActivity","getLastKnownLocation");
 
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
             reportdao.sendReport(latLng, getApplicationContext());
+            Log.v("MapsActivity","dopo sendreport");
 
         }
+        Log.v("MapsActivity","fine report");
 
 
 
@@ -567,6 +563,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         }
+        Log.v("MapsActivity","bestLocation:"+bestLocation);
         return bestLocation;
     }
 
