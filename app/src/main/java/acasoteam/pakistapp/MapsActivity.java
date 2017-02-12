@@ -285,6 +285,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+
 
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -306,7 +308,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             pakis = myHelper.selectPakis(db);
 
             for (Paki paki : pakis){
-                mMap.addMarker(new MarkerOptions().position(new LatLng(paki.getLat(), paki.getLon())).title("You are here!").snippet("Consider yourself located"));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(paki.getLat(), paki.getLon())));
                 Log.v("MapsActivity","lat:"+paki.getLat()+", lon:"+paki.getLon());
             }
 
@@ -316,6 +318,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //mMap.setOnMarkerClickListener(this);
 
         if (pakis != null) {
 
@@ -327,6 +331,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
+
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -527,7 +533,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
             reportdao.sendReport(latLng, getApplicationContext());
-            Log.v("MapsActivity","dopo sendreport");
+            Log.v("MapsActivity", "dopo sendreport");
 
         }
         Log.v("MapsActivity","fine report");
