@@ -47,9 +47,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import android.widget.LinearLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +75,8 @@ import com.facebook.FacebookSdk;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        OnMarkerClickListener{
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -94,6 +97,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     FloatingActionButton fab1;
     FloatingActionButton fab2;
     CallbackManager callbackManager;
+    BottomSheetBehavior bottomSheetBehavior;
+
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        // set hideable or not
+        bottomSheetBehavior.setHideable(true);
+        return true;
+    }
+
+
 
 
     @Override
@@ -138,9 +152,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
 
         // init the bottom sheet behavior
-      /*  BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+      bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
 
-        // change the state of the bottom sheet
+        /*// change the state of the bottom sheet
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -281,11 +295,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.setOnMarkerClickListener(this);
+
 
 
         //Initialize Google Play Services
@@ -319,20 +336,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-        //mMap.setOnMarkerClickListener(this);
 
         if (pakis != null) {
 
 
         }
-
-
-
-
-
     }
 
+        {
 
+        }
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
