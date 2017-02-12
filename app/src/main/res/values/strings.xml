@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">pakistapp</string>
     <string name="title_activity_maps">Map</string>
+    <string name="facebook_app_id">168936093593881</string>
 </resources>

@@ -1,127 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="acasoteam.pakistapp.MapsActivity">
+    <RelativeLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/white"
-        android:id="@+id/linearLayoutNewStage">
-
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/top"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_menu_white_24dp"
-                android:background="@drawable/imagebutton_background"
-                android:layout_centerVertical="true"/>
-
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_tune_white_24dp"
-                android:background="@drawable/imagebutton_background"
-                android:layout_gravity="right"
-                android:layout_marginRight="15dp"
-                android:layout_centerVertical="true"/>
-
-        </android.support.v7.widget.Toolbar>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <fragment
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="acasoteam.pakistapp.MapsActivity" />
-
-
-
-            <android.support.v7.widget.Toolbar
-                android:layout_margin="10dp"
-                android:elevation="2dp"
-                android:id="@+id/top2"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/white"
-                xmlns:android="http://schemas.android.com/apk/res/android">
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_white_24dp"
-                    android:background="@drawable/imagebutton_background"
-                    android:layout_centerVertical="true"/>
-
-
-                <ImageButton
-                    android:onClick="getMyLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tune_white_24dp"
-                    android:background="@drawable/imagebutton_background"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="15dp"
-                    android:layout_centerVertical="true"/>
-
-            </android.support.v7.widget.Toolbar>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:id="@+id/linearLayoutNewStage">
+            <include layout="@layout/appbar"/>
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="16dp"
-                android:src="@drawable/ic_media_play"
-                android:onClick="report"/>
-
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:src="@drawable/ic_cast_dark"
-                android:layout_above="@id/fab2"
-                android:adjustViewBounds="false"
-                android:layout_alignParentRight="true"
-                android:onClick="goToNearest"/>
+            <include layout="@layout/main_content"/>
+        </LinearLayout>
+    </RelativeLayout>
 
 
-        </RelativeLayout>
+    <include layout="@layout/bottom_sheet" />
 
-    </android.support.design.widget.CoordinatorLayout>
-</RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_cast_dark"
+        android:id="@+id/fab"
+        android:onClick="report"
+        app:layout_anchor="@+id/bottom_sheet"
+        app:layout_anchorGravity="top|end" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_cast_dark"
+        android:id="@+id/fab2"
+        android:onClick="goToNearest"
+        app:layout_anchor="@+id/bottom_sheet"
+        app:layout_anchorGravity="top|start" />
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>

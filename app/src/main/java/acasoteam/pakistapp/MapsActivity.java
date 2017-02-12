@@ -1,21 +1,42 @@
 package acasoteam.pakistapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookAuthorizationException;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.share.Sharer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -29,12 +50,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
+import android.widget.LinearLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 //
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -42,6 +65,10 @@ import acasoteam.pakistapp.asynktask.GetAddress;
 import acasoteam.pakistapp.asynktask.GetJson;
 import acasoteam.pakistapp.database.DBHelper;
 import acasoteam.pakistapp.entity.Paki;
+
+
+import com.facebook.FacebookSdk;
+
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -56,14 +83,167 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     DBHelper myHelper;
     SQLiteDatabase db;
 
+    String loginId = null;
+    String name = null;
+    String surname = null;
+    String email = null;
+
+    Activity activity;
+
     LatLng latLng;
+    FloatingActionButton fab1;
+    FloatingActionButton fab2;
+    CallbackManager callbackManager;
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+       /* if (resultCode == RESULT_OK)
+        {
+            Log.v("MapsActivity","onSuccess");
+            Log.v("MapsActivity","data: "+ data.toString());
+            Log.v("MapsActivity","data extras: "+data.getExtras().toString());
+
+
+        }
+        else
+        {
+            Log.v("MapsActivity","else");
+
+        }*/
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        activity = this;
+        callbackManager = CallbackManager.Factory.create();
+        //LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        //loginButton.setReadPermissions("public_profile");
+        //Log.v("MapsActivity","getLoginBehavior:"+loginButton.getLoginBehavior().toString());
+        // FacebookSdk.sdkInitialize(getApplicationContext());
+
+	   /*fab2 = (FloatingActionButton)findViewById(R.id.fab2);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) fab2.getLayoutParams();
+            p.setMargins(0, 12, 21, -10);
+        }*/
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
 
 
+        // get the bottom sheet view
+        LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
+
+        // init the bottom sheet behavior
+      /*  BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+
+        // change the state of the bottom sheet
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        // set the peek height
+        bottomSheetBehavior.setPeekHeight(340);
+
+        // set hideable or not
+        bottomSheetBehavior.setHideable(false);
+
+        // set callback for changes
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });*/
+
+
+        // Callback registration
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.v("MapsActivity","onSuccess");
+                final AccessToken accessToken = loginResult.getAccessToken();
+
+                GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject user, GraphResponse graphResponse) {
+                        loginId = user.optString("id");
+                        name = user.optString("name");
+                        email = user.optString("email");
+                        Log.d("MapsActivity", "name:"+name);
+                        Log.d("MapsActivity", "email:"+email);
+
+                        Log.d("MapsActivity", user.optString("id"));
+                        Log.d("MapsActivity", user.optString("email"));
+                        if (loginId != null) {
+                            Log.v("MapsActivity","loginId != null, ed è:"+loginId);
+
+                            ReportDao reportdao = new ReportDao();
+
+                            //todo: cambiare ste assegnazioni random
+                            LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+                            if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                                    Manifest.permission.ACCESS_FINE_LOCATION)
+                                    == PackageManager.PERMISSION_GRANTED) {
+                                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                                reportdao.sendReport(latLng, getApplicationContext());
+
+                            }
+                        } else {
+                            Log.v("MapsActivity","loginId == 0");
+
+                        }
+                    }
+                }).executeAsync();
+
+            }
+
+            @Override
+            public void onCancel() {
+                Log.v("MapsActivity","onCancel");
+                loginId = null;
+
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Log.v("MapsActivity","onError");
+                Log.e("MapsActivity","ERROR: "+exception.getMessage());
+                loginId = null;
+                if (exception instanceof FacebookAuthorizationException) {
+                    if (AccessToken.getCurrentAccessToken() != null) {
+                        LoginManager.getInstance().logOut();
+                        LoginManager.getInstance().logInWithReadPermissions(activity, Arrays.asList("public_profile", "email"));
+                    }
+                }
+
+
+
+            }
+        });
+        //LoginManager.getInstance().logOut();
 
         //FINE PROVA
 
@@ -320,9 +500,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 == PackageManager.PERMISSION_GRANTED) {
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            if (location != null) {
 
-            pakidao.goToNearest(latLng, getApplicationContext());
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                Paki nearestP = pakidao.goToNearest(latLng, getApplicationContext());
+                LatLng PlatLng = new LatLng(nearestP.getLat(), nearestP.getLon());
+
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(PlatLng));
+            }
+
+
 
         }
 
@@ -339,7 +528,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location = getLastKnownLocation();
 
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -352,5 +541,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
+
+
+
+    private Location getLastKnownLocation() {
+        LocationManager locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Location l = locationManager.getLastKnownLocation(provider);
+                if (l == null) {
+                    continue;
+                }
+                if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = l;
+                }
+
+            }
+
+
+
+        }
+        return bestLocation;
+    }
+
+
 
 }
