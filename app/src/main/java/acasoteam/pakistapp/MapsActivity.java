@@ -516,31 +516,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void report(View view) {
 
-        ReportDao reportdao = new ReportDao();
-
-        Log.v("MapsActivity","report");
-        //todo: cambiare ste assegnazioni random
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            Log.v("MapsActivity","permessi ok");
-
-            Location location = getLastKnownLocation();
-            Log.v("MapsActivity","getLastKnownLocation");
-
-            latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-            reportdao.sendReport(latLng, getApplicationContext());
-            Log.v("MapsActivity", "dopo sendreport");
-
-        }
-        Log.v("MapsActivity","fine report");
-
-
-
-
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
 
     }
 
