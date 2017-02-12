@@ -198,7 +198,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                 latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                reportdao.sendReport(latLng, getApplicationContext());
+                                reportdao.sendReport(1,latLng, getApplicationContext());
 
                             }
                         } else {
