@@ -1,6 +1,7 @@
 package acasoteam.pakistapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 

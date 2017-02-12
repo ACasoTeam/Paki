@@ -40,8 +40,6 @@ public class SendReport extends AsyncTask<String, Void, Void> {
             //urlConnection.setDoInput(true);
             urlConnection.setRequestMethod("POST");
 
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setRequestProperty("Accept", "application/json");
             //urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             urlConnection.setRequestProperty( "charset", "utf-8");
             //urlConnection.setUseCaches( false );
@@ -51,41 +49,41 @@ public class SendReport extends AsyncTask<String, Void, Void> {
 
             Log.v("GetJson","dopo il connect");
 
-
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
                 Log.v("GetJson","return null");
-                res = 0;
-            } else {
-                reader = new BufferedReader(new InputStreamReader(inputStream));
+                return null;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String line;
-
-                if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
-                    Log.v("GetJson","buffer.length() == 0");
-                    res = 0;
-                } else {
-                    while ((line = reader.readLine()) != null) {
-                        buffer.append(line);
-                    }
-                    Log.v("GetJson","buffer = "+buffer.toString());
-                    res = Integer.parseInt(buffer.toString());
-                }
-
-
-
-                //forecastJsonStr = buffer.toString();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line);
 
 
             }
 
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                Log.v("GetJson","buffer.length() == 0");
+                return null;
+            }
+            //forecastJsonStr = buffer.toString();
+
+            Log.v("GetJson",buffer.toString());
+            res = Integer.parseInt(buffer.toString());
+
+
         } catch (Exception e) {
             e.printStackTrace();
             Log.d("test debug", "eccez:" + e.getMessage());
+            res = 2;
 
         }
 
@@ -100,9 +98,11 @@ public class SendReport extends AsyncTask<String, Void, Void> {
         CharSequence text = "";
 
         if (res == 0){
-            text = "Errore nell'invio del Report";
-        } else {
+            text = "Report già inviato";
+        } else if (res == 1){
             text = "Report inviato correttamente";
+        } else {
+            text = "Errore nell'invio del Report";
         }
 
         int duration = Toast.LENGTH_SHORT;
