@@ -343,8 +343,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
 
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
