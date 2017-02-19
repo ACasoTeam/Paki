@@ -251,7 +251,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //FINE PROVA
 
-        String u = "http://acaso-pakistapp.rhcloud.com/PakiOperation?action=pakilist";
+        String u = "https://acaso-pakistapp.rhcloud.com/PakiOperation?action=pakilist";
 /*
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);*/
