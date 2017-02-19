@@ -334,7 +334,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         List<Paki> pakis = null;
         try {
             pakis = myHelper.selectPakis(db);
-            //ASD
+
 
             for (Paki paki : pakis){
                 marker = mMap.addMarker(new MarkerOptions().position(new LatLng(paki.getLat(), paki.getLon())));
