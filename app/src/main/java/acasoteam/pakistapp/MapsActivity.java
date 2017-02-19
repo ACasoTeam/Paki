@@ -103,8 +103,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(final Marker marker) {
         // set hideable or not
-        bottomSheetBehavior.setHideable(true);
+        bottomSheetBehavior.setPeekHeight(240);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         return true;
+    }
+
+    public void showBottomSheet(View v) {
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
 
@@ -153,6 +158,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // init the bottom sheet behavior
       bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+      bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         /*// change the state of the bottom sheet
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
