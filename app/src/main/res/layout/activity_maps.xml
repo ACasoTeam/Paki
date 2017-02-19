@@ -33,6 +33,7 @@
         android:src="@drawable/ic_cast_dark"
         android:id="@+id/fab"
         android:onClick="report"
+        app:elevation="1dp"
         app:layout_anchor="@+id/bottom_sheet"
         app:layout_anchorGravity="top|end" />
 
@@ -43,6 +44,7 @@
         android:src="@drawable/ic_cast_dark"
         android:id="@+id/fab2"
         android:onClick="goToNearest"
+        app:elevation="1dp"
         app:layout_anchor="@+id/bottom_sheet"
         app:layout_anchorGravity="top|start" />
 

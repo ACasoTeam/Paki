@@ -92,7 +92,7 @@ public class GetFeedback extends AsyncTask<String, Void, Void> {
         CharSequence text = "";
 
         if (res.trim().equals("0") || res.trim().equals("-1")){
-            text = "Si è verificato qalche problema";
+            text = "Si è verificato qualche problema";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.setGravity(Gravity.CENTER, 0, 0);
